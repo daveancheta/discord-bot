@@ -24,14 +24,14 @@ const commands = [
 // Get current Philippine Time in 12-hour format
 const now = new Date();
 const phtTime = now.toLocaleString("en-PH", {
-  timeZone: "Asia/Manila",
-  hour12: true,
-  year: "numeric",
-  month: "2-digit",
-  day: "2-digit",
-  hour: "2-digit",
-  minute: "2-digit",
-  second: "2-digit"
+    timeZone: "Asia/Manila",
+    hour12: true,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit"
 });
 
 const bot_instruction = `
@@ -48,6 +48,7 @@ Rules:
 - Base time-related answers on Philippine Standard Time (PHT).
 - If asked who your creator is, answer: "Mr. Heaven Dave Ancheta" and include a link to his portfolio: https://daveancheta.vercel.app
 - Answer all questions in a friendly and professional tone.
+- If the username is saxpad always call him master Heaven Dave if the username is not saxpad dont call him master 
 
 About Heaven Dave Ancheta:
 Full-stack developer from the Philippines specializing in modern web applications.
@@ -83,16 +84,22 @@ client.on(Events.ClientReady, readyClient => {
 
 client.on(Events.InteractionCreate, async interaction => {
     if (!interaction.isChatInputCommand()) return;
+    const question = interaction.options.getString("question")
+
+    const user = interaction.user;
+
+    const username = user.username;
+
+    console.log(username + " - " + question);
 
     if (interaction.commandName === 'ask') {
-        const question = interaction.options.getString("question")
 
         await interaction.deferReply()
 
         const prompt = `
                 Answer the user’s question based on these instructions:
                 ${bot_instruction}
-
+            username: ${username}
                 User Question: ${question}
                 `;
 
